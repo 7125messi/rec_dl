@@ -3,6 +3,10 @@ import operator
 import numpy as np
 import sys
 
+# numpy非科学技术法显示
+np.set_printoptions(suppress=True)
+
+
 # produce item sim file
 def load_item_vec(input_file):
     """
@@ -11,15 +15,15 @@ def load_item_vec(input_file):
     """
     if not os.path.exists(input_file):
         return {}
-    linenum = 1
+    linenum = 0
     item_vec = {}
     with open(input_file) as fp:
         for line in fp:
             if linenum == 0:
                 linenum += 1
                 continue
-            item = line.strip().split(',')
-            if len(item) < 129:
+            item = line.strip().split(' ')
+            if len(item) < 101:
                 continue
             itemid = item[0]
             if itemid == '</s>':
@@ -51,19 +55,21 @@ def cal_item_sim(item_vec,itemid,output_file):
         out_str = itemid + "\t"
         tmp_list = []
         for zuhe in sorted(score.items(),key=operator.itemgetter(1),reverse=True):
-            tmp_list.append(zuhe[0] + "_" + str(zuhe[1]))
+            # tmp_list.append(zuhe[0] + "_" + str(zuhe[1])) # 调试
+            tmp_list.append(zuhe[0])
         out_str += ";".join(tmp_list)
         fw.write(out_str + '\n')
 
 def run_main(input_file,output_file):
     item_vec = load_item_vec(input_file)
-    cal_item_sim(item_vec,"38",output_file)
+    cal_item_sim(item_vec,"318",output_file)
 
 
 if __name__ == "__main__":
     # item_vec  = load_item_vec('../data/item_vec.txt')
     # print(len(item_vec))
-    # print(item_vec["38"])
+    # print(item_vec["318"])
+
     # run_main('../data/item_vec.txt','../data/sim_result.txt')
 
     if len(sys.argv) < 3:

@@ -6,6 +6,8 @@ import sys
 sys.path.append('../util')
 import read
 
+
+
 # 用户刻画和线上推荐
 def get_up(item_cate,input_file):
     """
@@ -28,7 +30,7 @@ def get_up(item_cate,input_file):
             item = line.strip().split(',')
             if len(item) < 4:
                 continue
-            userid,itemid,rating,timestamp = item[0],item[1],float(item[2]),item[3]
+            userid,itemid,rating,timestamp = item[0],item[1],float(item[2]),int(item[3])
             if rating < score_thr:
                 continue
             # 无法获得类别也要过滤
@@ -40,13 +42,14 @@ def get_up(item_cate,input_file):
             for fix_cate in item_cate[itemid]:
                 if fix_cate not in record[userid]:
                     record[userid][fix_cate] = 0
+                # print(time_score)
                 record[userid][fix_cate] += rating * time_score * item_cate[itemid][fix_cate]
 
     # 对每个用户进行排序
     for userid in record:
         if userid not in up:
             up[userid] = []
-            total_score = 0
+        total_score = 0
         for zuhe in sorted(record[userid].items(),key=operator.itemgetter(1),reverse=True)[:topk]:
             up[userid].append([zuhe[0],zuhe[1]])
             # up[userid].append((zuhe[0], zuhe[1]))
@@ -64,8 +67,8 @@ def get_time_score(timestamp):
     # max timestamp:1493846415
     fix_time_stamp = 1493846415
     total_sec = 24*60*60
-    delta = (fix_time_stamp - int(timestamp))/total_sec
-    # delta = (fix_time_stamp - int(timestamp)) / total_sec/100
+    # delta = (fix_time_stamp - int(timestamp))/total_sec
+    delta = (fix_time_stamp - int(timestamp)) / total_sec /100
     # print(delta)
     return round(1/1+delta,3)
 
@@ -97,12 +100,25 @@ def recom(cate_item_sort,up,userid,topk=10):
 
 def run_main():
     ave_score = read.get_ave_score('../data/ratings.txt')
+
+    # print(ave_score)
+    print(ave_score['1']) # 获得每部电影观众对其的平均打分
+
     item_cate,cate_item_sort = read.get_item_cate(ave_score,'../data/movies.txt')
-    print(cate_item_sort)
+
+    # print(item_cate)
+    print(item_cate['1']) # 编号为1的电影的属于哪些类别电影
+    print(len(item_cate)) # 一共有9742部电影
+
+    # print(cate_item_sort)
+    print(cate_item_sort['Action']) # 动作片类型的电影有哪些，其对应的item id
+    print(len(cate_item_sort))      # 20多种类的电影
+
     up = get_up(item_cate,'../data/ratings.txt')
+    # print(up)
     print(len(up))
-    print(up['38'])
-    print(recom(cate_item_sort,up,38))
+    print(up['28'])
+    print(recom(cate_item_sort,up,'28'))
 
 if __name__ == "__main__":
     run_main()

@@ -10,12 +10,12 @@ def get_ave_score(input_file):
     """
     if not os.path.exists(input_file):
         return {}
-    linenum = 1
+    linenum = 0
     record = {}
     ave_score = {}
     with open(input_file,encoding='utf-8') as fp:
         for line in fp:
-            if linenum == 1:
+            if linenum == 0:
                 linenum += 1
                 continue
             item = line.strip().split(",")
@@ -46,7 +46,7 @@ def get_item_cate(ave_score,input_file):
     cate_item_sort = {}
     with open(input_file,encoding='utf-8') as fp:
         for line in fp:
-            if linenum == 1:
+            if linenum == 0:
                 linenum += 1
                 continue
             item = line.strip().split(",")

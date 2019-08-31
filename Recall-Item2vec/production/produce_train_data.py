@@ -41,4 +41,5 @@ if __name__ == '__main__':
         inputfile = sys.argv[1]
         outputfile  = sys.argv[2]
         produce_training_data(inputfile,outputfile)
+
     # produce_training_data('../data/ratings.txt','../data/train_data.txt')

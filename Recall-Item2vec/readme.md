@@ -1,7 +1,8 @@
 https://github.com/dav/word2vec
-下载，切换到word2vec目录下，进入./src文件夹，然后输入make，回车，之后会在bin文件下出现很多可执行文件
+# 注意
+- src/*.c  请注释掉#include <malloc.h>
+- 下载，切换到word2vec目录下，进入./src文件夹，然后输入make，回车，之后会在bin文件下出现很多可执行文件
 ```shell
-zhaoyadong@HPCL201906025 ~/word2vec
 $ ./bin/word2vec
 WORD VECTOR estimation toolkit v 0.1c
 
@@ -48,11 +49,60 @@ Examples:
 ```
 
 ```shell
-sh train.sh ../data/train_data.txt
+sh train.sh
 ```
 ```shell
 # 动态查看item=1找出最相近的 binary = 1 二进制
 ./bin/distance ../data/item_vec.txt
+
+(nlp) [zhaoyadong@15:53:51]~/opt/git/rec_dl/Recall-Item2vec/production$ ../bin/distance ../data/item_vec.txt 
+Enter word or sentence (EXIT to break): 1
+
+Word: 1  Position in vocabulary: 17
+
+                                              Word       Cosine distance
+------------------------------------------------------------------------
+                                              3624              0.295818
+                                              2581              0.276785
+                                             99114              0.276024
+                                              8972              0.267305
+                                              1081              0.267098
+                                              3917              0.265685
+                                             31410              0.263051
+                                             33660              0.261018
+                                              8207              0.259878
+                                             60040              0.259552
+                                              2628              0.259085
+                                                39              0.258058
+                                             54190              0.254846
+                                              2997              0.254223
+                                            112290              0.249965
+                                            177593              0.249573
+                                             71033              0.247637
+                                              5816              0.247097
+                                             54001              0.242311
+                                              1231              0.239053
+                                              2359              0.238679
+                                             53996              0.227248
+                                              3334              0.226643
+                                              2009              0.226416
+                                            157296              0.225725
+                                              8961              0.225184
+                                              8368              0.224874
+                                               101              0.224004
+                                             27611              0.220415
+                                              1061              0.219882
+                                              3317              0.217398
+                                              2117              0.213797
+                                                28              0.213689
+                                              7090              0.211147
+                                              1717              0.210067
+                                               750              0.209975
+                                             57368              0.209532
+                                             95510              0.209091
+                                              3159              0.208904
+                                              6440              0.208476
+Enter word 
 ```
 
 # 根据item embedding向量得到相似度矩阵

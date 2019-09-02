@@ -1,6 +1,7 @@
 import xgboost as xgb
 from ana_train_test_data import ana_train_test_data
 import matplotlib.pyplot as plt
+import graphviz
 
 
 def train_xgboost_model(input_train_data,input_test_data,result_file,xgboost_model_file):
@@ -27,9 +28,14 @@ def train_xgboost_model(input_train_data,input_test_data,result_file,xgboost_mod
     # 根据其在输入数组中的索引，特征被自动命名为f0...
     xgb.plot_importance(best_model,max_num_features=10)
     # 输出的 tree（树）会通过 matplotlib 来展示, 使用 plot_tree 指定 target tree（目标树）的序号. 该函数需要 graphviz 和 matplotlib.
+    # 1.模型
+    # 2.树的索引，从0开始
+    # 3.显示方向，缺省为竖直，‘LR'是水平方向
     # xgb.plot_tree(best_model, num_trees=28)
+    # xgb.plot_tree(bst, num_trees=1, rankdir='LR')
     # 当您使用 IPython 时, 你可以使用 to_graphviz 函数, 它可以将 target tree（目标树）转换成 graphviz 实例. graphviz 实例会自动的在 IPython 上呈现.
     # xgb.to_graphviz(bst, num_trees=2)
+
     plt.show()
     best_model.save_model(xgboost_model_file)
 

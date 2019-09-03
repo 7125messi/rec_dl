@@ -1,3 +1,4 @@
+from __future__ import division
 import tensorflow as tf
 import os
 from sklearn.metrics import roc_auc_score
@@ -62,6 +63,9 @@ def get_feature_column():
         tf.feature_column.embedding_column(occupation,9),
         tf.feature_column.embedding_column(relationship,9)
     ]
+    print(wide_column)
+    print("==========================================================================================================")
+    print(deep_column)
     return wide_column,deep_column
 
 def build_model_estimator(wide_column,deep_column,model_floder):
@@ -74,24 +78,26 @@ def build_model_estimator(wide_column,deep_column,model_floder):
     # 隐层维度，4层隐层，隐层节点个数决定参数总个数，deep_column 有50维特征：50*128=6400  128*64=8192 64*32=2048 32*16=512
     # 总共17152维度，大概需要1715200个样本，但是我们只有30000个样本，需要数据重复采样55倍
     model_estimator = tf.estimator.DNNLinearCombinedEstimator(
-        head=tf.estimator.BaselineClassifier(n_classes=2),
+        head=tf.estimator.BinaryClassHead(),
         model_dir=model_floder,
         linear_feature_columns=wide_column,
-        linear_optimizer=tf.train.FtrlOptimizer(
+        linear_optimizer=tf.keras.optimizers.Ftrl(
             learning_rate=0.1,
             l2_regularization_strength=1.0
         ),
         dnn_feature_columns=deep_column,
-        dnn_optimizer=tf.train.ProximalAdagradOptimizer(
-            learning_rate=0.1,
-            l1_regularization_strength=0.001,
-            l2_regularization_strength=0.001
-        ),
-        dnn_hidden_units=[128,64,32,16]
+        dnn_hidden_units=[128, 64, 32, 16],
+        dnn_optimizer=tf.keras.optimizers.Adagrad(
+            learning_rate=0.1
+            # l1_regularization_strength=0.001,
+            # l2_regularization_strength=0.001
+        )
     )
     feature_column = wide_column + deep_column
     feature_spec = tf.feature_column.make_parse_example_spec(feature_column)
     serving_input_fn = (tf.estimator.export.build_parsing_serving_input_receiver_fn(feature_spec))
+    print(model_estimator)
+    print(serving_input_fn)
     return model_estimator,serving_input_fn
 
 # 和官方给的模型几乎一样
@@ -152,8 +158,9 @@ def train_wd_model(model_estimator,train_file,test_file,model_export_folder,serv
     # for index in range(total_run):
     #     model_estimator.train(input_fn=lambda: input_fn(train_file, 10, True, 100, False))  # 训练
     #     print(model_estimator.evaluate(input_fn=lambda: input_fn(test_file, 1, False, 100, False)))  # 测试
-    model_estimator.train(input_fn = lambda:input_fn(train_file,20,True,100,False)) # 训练
-    print(model_estimator.evaluate(input_fn = lambda:input_fn(test_file,1,False,100,False))) # 测试
+
+    model_estimator.train(input_fn = lambda:input_fn(train_file,20,'',100,'')) # 训练
+    print(model_estimator.evaluate(input_fn = lambda:input_fn(test_file,1,'',100,''))) # 测试
     model_estimator.export_savemodel(model_export_folder,serving_input_fn)
 
 def model_performance_test(model_estimator,test_file):
@@ -163,7 +170,9 @@ def model_performance_test(model_estimator,test_file):
     for one_res in result:
         if "probabilities" in one_res:
             predict_list.append(one_res["probabilities"][1])
-    roc_auc_score(predict_list,test_file)
+    print(predict_list[:10])
+    print(test_file[:10])
+    # roc_auc_score(predict_list,test_file)
 
 
 def get_test_label(test_file):
@@ -198,7 +207,7 @@ def run_main(train_file,test_file,model_floder,model_export_folder):
     wide_column,deep_column = get_feature_column()
     model_estimator,serving_input_fn = build_model_estimator(wide_column,deep_column,model_floder)
     train_wd_model(model_estimator,train_file,test_file,model_export_folder,serving_input_fn)
-    model_performance_test(model_estimator,test_file)
+    # model_performance_test(model_estimator,test_file)
 
 if __name__ == "__main__":
     run_main('../data/train.csv','../data/test.csv','../data/wd','../data/wd_export')

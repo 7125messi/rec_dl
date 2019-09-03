@@ -81,7 +81,8 @@ def get_item_cate(ave_score,input_file):
 if __name__ == "__main__":
     ave_score = get_ave_score('../data/ratings.txt')
     print(len(ave_score))
-    print(ave_score['1'])
+    print(ave_score['38'])
+
     item_cate,cate_item_sort = get_item_cate(ave_score,'../data/movies.txt')
-    print(item_cate['1'])
+    print(item_cate['38'])
     print(cate_item_sort['Children'])

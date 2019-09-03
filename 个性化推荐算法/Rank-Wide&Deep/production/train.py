@@ -78,7 +78,6 @@ def build_model_estimator(wide_column,deep_column,model_floder):
     # 隐层维度，4层隐层，隐层节点个数决定参数总个数，deep_column 有50维特征：50*128=6400  128*64=8192 64*32=2048 32*16=512
     # 总共17152维度，大概需要1715200个样本，但是我们只有30000个样本，需要数据重复采样55倍
     model_estimator = tf.estimator.DNNLinearCombinedEstimator(
-        head=tf.estimator.BinaryClassHead(),
         model_dir=model_floder,
         linear_feature_columns=wide_column,
         linear_optimizer=tf.keras.optimizers.Ftrl(

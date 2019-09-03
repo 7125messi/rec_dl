@@ -68,8 +68,8 @@ def model_train_process():
     #     ana_recom_result(train_data,userid,recom_list)
 
     # 某一用户推荐
-    recom_list = give_recom_result(user_vec,item_vec,24)
-    ana_recom_result(train_data,24,recom_list)
+    recom_list = give_recom_result(user_vec,item_vec,"38")
+    ana_recom_result(train_data,"38",recom_list)
 
 def give_recom_result(user_vec,item_vec,userid):
     """

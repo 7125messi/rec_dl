@@ -102,13 +102,13 @@ def run_main():
     ave_score = read.get_ave_score('../data/ratings.txt')
 
     # print(ave_score)
-    print(ave_score['1']) # 获得每部电影观众对其的平均打分
+    print(ave_score['38']) # 获得每部电影观众对其的平均打分
 
     item_cate,cate_item_sort = read.get_item_cate(ave_score,'../data/movies.txt')
 
     # print(item_cate)
-    print(item_cate['1']) # 编号为1的电影的属于哪些类别电影
-    print(len(item_cate)) # 一共有9742部电影
+    print(item_cate['38']) # 编号为38的电影的属于哪些类别电影
+    print(len(item_cate))  # 一共有9742部电影
 
     # print(cate_item_sort)
     print(cate_item_sort['Action']) # 动作片类型的电影有哪些，其对应的item id
@@ -117,8 +117,8 @@ def run_main():
     up = get_up(item_cate,'../data/ratings.txt')
     # print(up)
     print(len(up))
-    print(up['28'])
-    print(recom(cate_item_sort,up,'28'))
+    print(up['38'])
+    print(recom(cate_item_sort,up,'38'))
 
 if __name__ == "__main__":
     run_main()

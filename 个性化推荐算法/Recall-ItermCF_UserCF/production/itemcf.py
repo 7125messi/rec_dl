@@ -102,7 +102,6 @@ def degbug_itemsim(item_info,sim_info):
     """
     :param item_info:{itemid:[title,genres]}
     :param sim_info:{itemid:[(itemid1,simscore),(itemid2,simscore)]}
-    :return:
     """
     fixed_itemid = "1"
     if fixed_itemid not in item_info:
@@ -139,13 +138,18 @@ def main_flow():
     (1) 计算得到item的相似度
     (2) 根据item的相似度来进行推荐
     """
+    # user_click,user_click_time = read.get_user_list('../data/ratings.txt')
+    # item_info = read.get_item_info('../data/movies.txt')
+    # sim_info = cal_item_sim(user_click,user_click_time)
+    # recom_result = cal_recom_result(sim_info,user_click)
+    # print(recom_result['1'])
+
     user_click,user_click_time = read.get_user_list('../data/ratings.txt')
     item_info = read.get_item_info('../data/movies.txt')
     sim_info = cal_item_sim(user_click,user_click_time)
-    # degbug_itemsim(item_info,sim_info)
+    degbug_itemsim(item_info,sim_info)
     recom_result = cal_recom_result(sim_info,user_click)
-    print(recom_result['1'])
-    # debug_recomresult(recom_result, item_info)
+    debug_recomresult(recom_result, item_info)
 
 if __name__ == "__main__":
     main_flow()

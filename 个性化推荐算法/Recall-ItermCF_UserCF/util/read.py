@@ -59,7 +59,7 @@ def get_item_info(item_file):
     return item_info
 
 if __name__ == "__main__":
-    user_click = get_user_list('../data/ratings.txt')
+    user_click,user_click_time = get_user_list('../data/ratings.txt')
     print(len(user_click))
     print(user_click['1'])
     item_info = get_item_info('../data/movies.txt')

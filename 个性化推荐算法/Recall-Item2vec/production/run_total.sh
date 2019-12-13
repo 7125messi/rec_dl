@@ -6,7 +6,7 @@ item_vec_file = '../data/item_vec.txt'
 item_sim_file = '../data/sim_result.txt'
 
 if [ -f $user_rating_file ];then
-  $python produce_train_file.py $user_rating_file train_file
+  $python produce_train_file.py $user_rating_file $train_file
 else
   echo "no rating file"
   exit
